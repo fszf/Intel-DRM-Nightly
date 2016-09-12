@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20160904
+pkgver=20160912
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -45,7 +45,7 @@ pkgver() {
 
 prepare() {
   cd "${srcdir}/${_srcname}"
-  
+
   # add patches for nvme
   patch -p1 -i "${srcdir}/001-nvme-1.diff"
   patch -p1 -i "${srcdir}/002-nvme-2.diff"
