@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20160912
+pkgver=20160921
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -23,6 +23,13 @@ source=('drm-intel::git://anongit.freedesktop.org/drm-intel#branch=drm-intel-nig
         "001-nvme-1.diff"
         "002-nvme-2.diff"
         "003-nvme-3.diff"
+        "https://github.com/graysky2/kernel_gcc_patch/raw/master/enable_additional_cpu_optimizations_for_gcc_v4.9%2B_kernel_v3.15%2B.patch"
+        "http://algo.ing.unimo.it/people/paolo/disk_sched/patches/4.7.0-v8r3/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.7.0.patch"
+        "http://algo.ing.unimo.it/people/paolo/disk_sched/patches/4.7.0-v8r3/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.7.0.patch"
+        "http://algo.ing.unimo.it/people/paolo/disk_sched/patches/4.7.0-v8r3/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch"
+        "http://algo.ing.unimo.it/people/paolo/disk_sched/patches/4.7.0-v8r3/0004-block-bfq-turn-BFQ-v7r11-for-4.7.0-into-BFQ-v8r3-for.patch"
+        "patch-4.7-ck4"
+        "ckpatch.diff"
         )
 sha256sums=('SKIP'
             '7e7a4ddc6dc1b0901624975b39cc05f4b0bf366b53cc8f24733c5c87f9a371e1'
@@ -31,7 +38,14 @@ sha256sums=('SKIP'
             '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
             '9762c163430aabca94efbab29ef702b483f1d9a97a912f84ad0239467cba16bc'
             'ee13c83bf95f8880a4c1346ccf7b2e36772bc06174d3b812c91d7109aca5b600'
-            '52a44ac52356816e5b5f39a19c7de2eb08ce634a861821abe060debca479f7e2')
+            '52a44ac52356816e5b5f39a19c7de2eb08ce634a861821abe060debca479f7e2'
+            'f479a5ca6abe4d50ca4c09e6e83a027369fcd3efff8d5ce60f0699d8fa47beb8'
+            'a6bd81bbb2f72cfd6ad992fdeff4bac1cb7c58a8edfc3fcd76c1d7275f73d284'
+            '144b54e95a1ffca88066e41f3c46c47df442d6497684e204e9f4312faab75572'
+            'db34093296bc02df769faa25dd609453321b05836d8265416e6975ebe9542821'
+            'db7872616d7ed3137d4b738e6e29fdaff58981a1d3912e3f1c33cd9fc61bca27'
+            '19da47d88590c288923945215f4e6b75ba1e784f3dc5d0ad639f26e0c75da8d4'
+            'efaee5a9b27babaf4aa1f3bd79331928b581977bc148aabcaeca45e575531f25')
 
 _kernelname=${pkgbase#linux}
 
@@ -46,10 +60,26 @@ pkgver() {
 prepare() {
   cd "${srcdir}/${_srcname}"
 
+ 
+  #patch CK's patch
+  #sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" "${srcdir}/patch-4.7-ck3"
+  #msg "Patching source with ck4 including BFS v0.497"
+  patch -Np1 -i "${srcdir}/patch-4.7-ck4"
+  patch -RNp1 -i "${srcdir}/ckpatch.diff"
+  
   # add patches for nvme
   patch -p1 -i "${srcdir}/001-nvme-1.diff"
   patch -p1 -i "${srcdir}/002-nvme-2.diff"
   patch -p1 -i "${srcdir}/003-nvme-3.diff"
+  
+  #patch graysky's gcc optimization patch
+  patch -Np1 -i "${srcdir}/enable_additional_cpu_optimizations_for_gcc_v4.9%2B_kernel_v3.15%2B.patch"
+  
+  #patchset for BFQ from http://algo.ing.unimo.it/people/paolo/disk_sched/patches/4.7.0-v8r3/
+  patch -Np1 -i "${srcdir}/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.7.0.patch"
+  patch -Np1 -i "${srcdir}/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.7.0.patch"
+  patch -Np1 -i "${srcdir}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch"
+  patch -Np1 -i "${srcdir}/0004-block-bfq-turn-BFQ-v7r11-for-4.7.0-into-BFQ-v8r3-for.patch"
 
 
   if [ "${CARCH}" = "x86_64" ]; then

@@ -7,6 +7,17 @@ I've added the NVME power saving patches to this.
 
 This branch is highly recommended for those using docks and other peripherals that aren't working too well on mainline.
 
+### Patches
+
+Included patches:
+
+NVME powersaving patches
+BFQ patch
+CK patch
+GCC optimization
+
+I'll include links later.
+
 ### Recommended Install
 git clone https://github.com/frank604/Intel-DRM-Nightly
 
