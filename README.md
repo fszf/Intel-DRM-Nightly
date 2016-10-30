@@ -7,16 +7,12 @@ I've added the NVME power saving patches to this.
 
 This branch is highly recommended for those using docks and other peripherals that aren't working too well on mainline.
 
-### Patches
+### Patches and Update Notes
 
-Included patches:
+Seems NVME power saving patch by Andy L. is already merged into Intel DRM Nightly.  No other patches applied to current pkgbuild.
 
-NVME powersaving patches
-BFQ patch
-CK patch
-GCC optimization
+4.9.x has an issue with booting.  I've modified the config as discussed in bug tracker until these issues are resolved. 
 
-I'll include links later.
 
 ### Recommended Install
 git clone https://github.com/frank604/Intel-DRM-Nightly
