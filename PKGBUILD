@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20160924
+pkgver=20161030
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -20,20 +20,15 @@ source=('drm-intel::git://anongit.freedesktop.org/drm-intel#branch=drm-intel-nig
         # standard config files for mkinitcpio ramdisk
         "${pkgbase}.install"
         "${pkgbase}.preset"
-        "nvmepatch1-V4.patch"
-        "nvmepatch2-V4.patch"
-        "nvmepatch3-V4.patch"
-        "https://github.com/graysky2/kernel_gcc_patch/raw/master/enable_additional_cpu_optimizations_for_gcc_v4.9%2B_kernel_v3.15%2B.patch"
         )
 sha256sums=('SKIP'
-            'a904dc5526b45008e1514b23d3c1dcdb0ac8022846456fa520d1b04944a91e36'
-            '12a793c3d4609f971c8db35ecf0fe1cc7df24017e97245dea909331e704af2aa'
+            'a68212b4c9f58ffd4367972fd5b7a12c0120eccdfe3f90018e8883b2caa09b1f'
+            '9f33b66f51d93014445d330d8beaf35d16549364a9453a436b2ba1fe11a9911d'
             'd590e751ab4cf424b78fd0d57e53d187f07401a68c8b468d17a5f39a337dacf0'
             '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
             '45a2b0344a5bea44e6e2a803238eb24223aff42c3c03ea6957cf6373b3bb5f6c'
             'da53dd78823199502cd9d3941096e09a3b744d52a43b7a2314be59bde9b1c88d'
-            '7799f733063a426ba159e0cb1e90ca1755d05eee9b421f6b87c1867832baa038'
-            'f479a5ca6abe4d50ca4c09e6e83a027369fcd3efff8d5ce60f0699d8fa47beb8')
+            '7799f733063a426ba159e0cb1e90ca1755d05eee9b421f6b87c1867832baa038')
 
 _kernelname=${pkgbase#linux}
 
@@ -48,27 +43,10 @@ pkgver() {
 prepare() {
   cd "${srcdir}/${_srcname}"
 
- 
-  #patch CK's patch
-  ##sed -i -re "s/^(.EXTRAVERSION).*$/\1 = /" "${srcdir}/patch-4.7-ck3"
-  ##msg "Patching source with ck4 including BFS v0.497"
-  #patch -Np1 -i "${srcdir}/patch-4.7-ck4"
-  #patch -RNp1 -i "${srcdir}/ckpatch.diff"
-  
-  # add patches for nvme
-  patch -p1 -i "${srcdir}/nvmepatch1-V4.patch"
-  patch -p1 -i "${srcdir}/nvmepatch2-V4.patch"
-  patch -p1 -i "${srcdir}/nvmepatch3-V4.patch"
-  
-  #patch graysky's gcc optimization patch
-  patch -Np1 -i "${srcdir}/enable_additional_cpu_optimizations_for_gcc_v4.9%2B_kernel_v3.15%2B.patch"
-  
-  #patchset for BFQ from http://algo.ing.unimo.it/people/paolo/disk_sched/patches/4.7.0-v8r3/
-  #patch -Np1 -i "${srcdir}/0001-block-cgroups-kconfig-build-bits-for-BFQ-v7r11-4.7.0.patch"
-  #patch -Np1 -i "${srcdir}/0002-block-introduce-the-BFQ-v7r11-I-O-sched-for-4.7.0.patch"
-  #patch -Np1 -i "${srcdir}/0003-block-bfq-add-Early-Queue-Merge-EQM-to-BFQ-v7r11-for.patch"
-  #patch -Np1 -i "${srcdir}/0004-block-bfq-turn-BFQ-v7r11-for-4.7.0-into-BFQ-v8r3-for.patch"
-
+  #add andy's nvme patch
+    #patch -p1 -i "${srcdir}/nvmepatch1-V4.patch"
+    #patch -p1 -i "${srcdir}/nvmepatch2-V4.patch"
+    #patch -p1 -i "${srcdir}/nvmepatch3-V4.patch"
 
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
