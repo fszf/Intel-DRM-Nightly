@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20161030
+pkgver=20161101
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -25,10 +25,7 @@ sha256sums=('SKIP'
             'a68212b4c9f58ffd4367972fd5b7a12c0120eccdfe3f90018e8883b2caa09b1f'
             '9f33b66f51d93014445d330d8beaf35d16549364a9453a436b2ba1fe11a9911d'
             'd590e751ab4cf424b78fd0d57e53d187f07401a68c8b468d17a5f39a337dacf0'
-            '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
-            '45a2b0344a5bea44e6e2a803238eb24223aff42c3c03ea6957cf6373b3bb5f6c'
-            'da53dd78823199502cd9d3941096e09a3b744d52a43b7a2314be59bde9b1c88d'
-            '7799f733063a426ba159e0cb1e90ca1755d05eee9b421f6b87c1867832baa038')
+            '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e')
 
 _kernelname=${pkgbase#linux}
 
