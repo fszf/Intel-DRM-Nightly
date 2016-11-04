@@ -11,7 +11,9 @@ This branch is highly recommended for those using docks and other peripherals th
 
 Seems NVME power saving patch by Andy L. is already merged into Intel DRM Nightly.  No other patches applied to current pkgbuild.
 
-4.9.x has an issue with booting.  I've modified the config as discussed in bug tracker until these issues are resolved. 
+Please consider using the pkbuild from AUR as this repo is only maintained when there is a necessary patch to be applied on top of the AUR pkg.
+
+~~4.9.x has an issue with booting.  I've modified the config as discussed in bug tracker until these issues are resolved. ~~
 
 
 ### Recommended Install
