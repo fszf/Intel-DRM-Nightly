@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20161101
+pkgver=20161107
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -20,12 +20,18 @@ source=('drm-intel::git://anongit.freedesktop.org/drm-intel#branch=drm-intel-nig
         # standard config files for mkinitcpio ramdisk
         "${pkgbase}.install"
         "${pkgbase}.preset"
+        "v4-1-3-nvme-scsi-Remove-power-management-support.patch"
+        "v4-2-3-nvme-Pass-pointers-not-dma-addresses-to-nvme_get-set_features.patch"
+        "v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"   
         )
 sha256sums=('SKIP'
             'a68212b4c9f58ffd4367972fd5b7a12c0120eccdfe3f90018e8883b2caa09b1f'
             '9f33b66f51d93014445d330d8beaf35d16549364a9453a436b2ba1fe11a9911d'
             'd590e751ab4cf424b78fd0d57e53d187f07401a68c8b468d17a5f39a337dacf0'
-            '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e')
+            '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
+            'b0175adcd4eb17174397d7dc8480c1a6465d72f1a087185238c3765f93872e59'
+            '292fe42ca43ad5b47e40795107257574eb87bd7b3de715a2438ee2c8fc06ccc7'
+            '943ef5dab9c1079b28c1bf014a3e9122208616d610702c6969ceecf1ec20d7ec')
 
 _kernelname=${pkgbase#linux}
 
@@ -41,9 +47,9 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   #add andy's nvme patch
-    #patch -p1 -i "${srcdir}/nvmepatch1-V4.patch"
-    #patch -p1 -i "${srcdir}/nvmepatch2-V4.patch"
-    #patch -p1 -i "${srcdir}/nvmepatch3-V4.patch"
+    patch -p1 -i "${srcdir}/v4-1-3-nvme-scsi-Remove-power-management-support.patch"
+    patch -p1 -i "${srcdir}/v4-2-3-nvme-Pass-pointers-not-dma-addresses-to-nvme_get-set_features.patch"
+    patch -p1 -i "${srcdir}/v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"
 
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
