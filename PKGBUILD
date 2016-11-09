@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20161107
+pkgver=20161108
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -47,8 +47,8 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   #add andy's nvme patch
-    patch -p1 -i "${srcdir}/v4-1-3-nvme-scsi-Remove-power-management-support.patch"
-    patch -p1 -i "${srcdir}/v4-2-3-nvme-Pass-pointers-not-dma-addresses-to-nvme_get-set_features.patch"
+    #patch -p1 -i "${srcdir}/v4-1-3-nvme-scsi-Remove-power-management-support.patch"
+    #patch -p1 -i "${srcdir}/v4-2-3-nvme-Pass-pointers-not-dma-addresses-to-nvme_get-set_features.patch"
     patch -p1 -i "${srcdir}/v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"
 
   if [ "${CARCH}" = "x86_64" ]; then
