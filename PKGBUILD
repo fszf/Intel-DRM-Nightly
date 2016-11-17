@@ -5,7 +5,7 @@
 
 pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20161108
+pkgver=20161116
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -258,7 +258,14 @@ _package-headers() {
     esac
   done
 
-  # remove unneeded architectures
+# add objtool for external module building and enabled VALIDATION_STACK option
+# https://bugs.archlinux.org/task/50036
+if [ -f tools/objtool/objtool ]; then 
+mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool"
+cp -a tools/objtool/objtool ${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool/
+fi
+  
+# remove unneeded architectures
   rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/build/arch/{alpha,arc,arm,arm26,arm64,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,metag,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,xtensa}
 
   # remove a files already in linux-docs package
