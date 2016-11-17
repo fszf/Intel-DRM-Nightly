@@ -35,6 +35,8 @@ sha256sums=('SKIP'
 
 _kernelname=${pkgbase#linux}
 
+_NUMA_off=yes # Disable NUMA in kernel config.  Taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-pf
+
 pkgver() {
   # drm-intel-nightly doesn't use tags, and it doesn't make sense to try to find
   # an upstream tag either. Having a compacted form of the integration manifest
@@ -65,6 +67,20 @@ prepare() {
   # set extraversion to pkgrel
   sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
 
+  # disable NUMA since 99.9% of users do not have multiple CPUs but do have multiple cores in one CPU
+  # see, https://bugs.archlinux.org/task/31187
+  if [ -n "$_NUMA_off" ] && [ "${CARCH}" = "x86_64" ]; then
+     sed -i -e 's/CONFIG_NUMA=y/# CONFIG_NUMA is not set/' \
+      -i -e '/CONFIG_AMD_NUMA=y/d' \
+      -i -e '/CONFIG_X86_64_ACPI_NUMA=y/d' \
+      -i -e '/CONFIG_NODES_SPAN_OTHER_NODES=y/d' \
+      -i -e '/# CONFIG_NUMA_EMU is not set/d' \
+      -i -e '/CONFIG_NODES_SHIFT=6/d' \
+      -i -e '/CONFIG_NEED_MULTIPLE_NODES=y/d' \
+      -i -e '/CONFIG_USE_PERCPU_NUMA_NODE_ID=y/d' \
+      -i -e '/CONFIG_ACPI_NUMA=y/d' ./.config
+  fi
+  
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
 
