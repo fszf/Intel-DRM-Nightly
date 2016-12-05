@@ -3,9 +3,9 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 # Contributor: Thomas Baechler <thomas@archlinux.org>
 
-pkgbase=linux-drm-intel-nightly
+pkgbase=linux-drm-intel-nightly-patched
 _srcname=drm-intel
-pkgver=20161122
+pkgver=20161205
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -28,7 +28,7 @@ sha256sums=('SKIP'
             'b8b1881d0f09312f6366a2f0628c84908927234777554cfa594e0af528ff1ab7'
             '61c493983740bef050fb60b02c05caf55cfb43ad5f6747702bc9d182f0b94f59'
             'd590e751ab4cf424b78fd0d57e53d187f07401a68c8b468d17a5f39a337dacf0'
-            '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
+            'd11338cda12c1ad4f73ba37ae974f32d2df582e72d38dc678e42f338555fc68d'
             'b0175adcd4eb17174397d7dc8480c1a6465d72f1a087185238c3765f93872e59'
             '292fe42ca43ad5b47e40795107257574eb87bd7b3de715a2438ee2c8fc06ccc7'
             '943ef5dab9c1079b28c1bf014a3e9122208616d610702c6969ceecf1ec20d7ec')
@@ -105,7 +105,7 @@ _package() {
   conflicts=("kernel26${_kernelname}")
   replaces=()
   backup=("etc/mkinitcpio.d/${pkgbase}.preset")
-  install=linux-drm-intel-nightly.install
+  install=linux-drm-intel-nightly-patched.install
 
   cd "${srcdir}/${_srcname}"
 
