@@ -3,9 +3,9 @@
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 # Contributor: Thomas Baechler <thomas@archlinux.org>
 
-pkgbase=linux-drm-intel-nightly-patched
+pkgbase=linux-drm-intel-nightly
 _srcname=drm-intel
-pkgver=20161205
+pkgver=20170113
 pkgdesc="The \"stable\" testing branch for the Intel graphics driver (i915)"
 
 pkgrel=1
@@ -20,22 +20,16 @@ source=('drm-intel::git://anongit.freedesktop.org/drm-intel#branch=drm-intel-nig
         # standard config files for mkinitcpio ramdisk
         "${pkgbase}.install"
         "${pkgbase}.preset"
-        "v4-1-3-nvme-scsi-Remove-power-management-support.patch"
-        "v4-2-3-nvme-Pass-pointers-not-dma-addresses-to-nvme_get-set_features.patch"
-        "v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"   
+        "v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"  
         )
 sha256sums=('SKIP'
-            'b8b1881d0f09312f6366a2f0628c84908927234777554cfa594e0af528ff1ab7'
-            '61c493983740bef050fb60b02c05caf55cfb43ad5f6747702bc9d182f0b94f59'
+            'a53c21cb8051ddb775e3dd0a236af78796fe1f9047cf2def6f69974605f874db'
+            'd0041aceeefab52dff42911e097b6b5746cb0ff16c770e3f2286c50dc65c781b'
             'd590e751ab4cf424b78fd0d57e53d187f07401a68c8b468d17a5f39a337dacf0'
-            'd11338cda12c1ad4f73ba37ae974f32d2df582e72d38dc678e42f338555fc68d'
-            'b0175adcd4eb17174397d7dc8480c1a6465d72f1a087185238c3765f93872e59'
-            '292fe42ca43ad5b47e40795107257574eb87bd7b3de715a2438ee2c8fc06ccc7'
+            '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
             '943ef5dab9c1079b28c1bf014a3e9122208616d610702c6969ceecf1ec20d7ec')
 
 _kernelname=${pkgbase#linux}
-
-_NUMA_off=yes # Disable NUMA in kernel config.  Taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=linux-pf
 
 pkgver() {
   # drm-intel-nightly doesn't use tags, and it doesn't make sense to try to find
@@ -48,11 +42,7 @@ pkgver() {
 prepare() {
   cd "${srcdir}/${_srcname}"
 
-  #add andy's nvme patch
-    #patch -p1 -i "${srcdir}/v4-1-3-nvme-scsi-Remove-power-management-support.patch"
-    #patch -p1 -i "${srcdir}/v4-2-3-nvme-Pass-pointers-not-dma-addresses-to-nvme_get-set_features.patch"
     patch -p1 -i "${srcdir}/v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"
-
   if [ "${CARCH}" = "x86_64" ]; then
     cat "${srcdir}/config.x86_64" > ./.config
   else
@@ -67,20 +57,6 @@ prepare() {
   # set extraversion to pkgrel
   sed -ri "s|^(EXTRAVERSION =).*|\1 -${pkgrel}|" Makefile
 
-  # disable NUMA since 99.9% of users do not have multiple CPUs but do have multiple cores in one CPU
-  # see, https://bugs.archlinux.org/task/31187
-  if [ -n "$_NUMA_off" ] && [ "${CARCH}" = "x86_64" ]; then
-     sed -i -e 's/CONFIG_NUMA=y/# CONFIG_NUMA is not set/' \
-      -i -e '/CONFIG_AMD_NUMA=y/d' \
-      -i -e '/CONFIG_X86_64_ACPI_NUMA=y/d' \
-      -i -e '/CONFIG_NODES_SPAN_OTHER_NODES=y/d' \
-      -i -e '/# CONFIG_NUMA_EMU is not set/d' \
-      -i -e '/CONFIG_NODES_SHIFT=6/d' \
-      -i -e '/CONFIG_NEED_MULTIPLE_NODES=y/d' \
-      -i -e '/CONFIG_USE_PERCPU_NUMA_NODE_ID=y/d' \
-      -i -e '/CONFIG_ACPI_NUMA=y/d' ./.config
-  fi
-  
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
 
@@ -105,7 +81,7 @@ _package() {
   conflicts=("kernel26${_kernelname}")
   replaces=()
   backup=("etc/mkinitcpio.d/${pkgbase}.preset")
-  install=linux-drm-intel-nightly-patched.install
+  install=linux-drm-intel-nightly.install
 
   cd "${srcdir}/${_srcname}"
 
@@ -274,14 +250,7 @@ _package-headers() {
     esac
   done
 
-# add objtool for external module building and enabled VALIDATION_STACK option
-# https://bugs.archlinux.org/task/50036
-if [ -f tools/objtool/objtool ]; then 
-mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool"
-cp -a tools/objtool/objtool ${pkgdir}/usr/lib/modules/${_kernver}/build/tools/objtool/
-fi
-  
-# remove unneeded architectures
+  # remove unneeded architectures
   rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/build/arch/{alpha,arc,arm,arm26,arm64,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,metag,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,xtensa}
 
   # remove a files already in linux-docs package
