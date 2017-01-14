@@ -17,10 +17,9 @@ Please consider using the pkbuild from AUR as this repo is only maintained when 
 
 
 ### Recommended Install
+````
 git clone https://github.com/frank604/Intel-DRM-Nightly
 
-makepkg -s
+makepkg -sfi
+````
 
-sudo pacman -U linux...pkg.tar.xz linux...-headers...pkg.tar.xz
-
-Note: Please use proper package names for above.
