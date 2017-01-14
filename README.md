@@ -15,7 +15,10 @@ Please consider using the pkbuild from AUR as this repo is only maintained when 
 
 ~~4.9.x has an issue with booting.  I've modified the config as discussed in bug tracker until these issues are resolved. ~~
 
-
+~~4.10.x defaults to s2idle instead of deep, run:
+````
+sudo sh -c "echo deep > /sys/power/mem_sleep" 
+````
 ### Recommended Install
 ````
 git clone https://github.com/frank604/Intel-DRM-Nightly

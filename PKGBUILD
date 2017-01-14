@@ -16,14 +16,15 @@ makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=('drm-intel::git://anongit.freedesktop.org/drm-intel#branch=drm-intel-nightly'
         # the main kernel config files
-        'config.x86_64'
+        'config' 'config.x86_64'
         # standard config files for mkinitcpio ramdisk
         "${pkgbase}.install"
         "${pkgbase}.preset"
         "v4-3-3-nvme-Enable-autonomous-power-state-transitions.patch"  
         )
 sha256sums=('SKIP'
-            'd0041aceeefab52dff42911e097b6b5746cb0ff16c770e3f2286c50dc65c781b'
+            '1cfdc3c6b0ce2c0b2efeb33881f6150a1de042b4ff90de80196ee703b7ad95b3'
+            '85a56939e4e6c45936676fea8b8307c9df536a2ee25f8b07bf631a39ff8cf2a3'
             'd590e751ab4cf424b78fd0d57e53d187f07401a68c8b468d17a5f39a337dacf0'
             '6ff6459f3703ed9ab7a90be96b17ddcc30fc4eb9d4b36c9cfed9b5f67e66fd4e'
             '943ef5dab9c1079b28c1bf014a3e9122208616d610702c6969ceecf1ec20d7ec')
